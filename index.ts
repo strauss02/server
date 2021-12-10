@@ -3,6 +3,7 @@ import diagnosesService from './services/diagnosesService';
 import patientService from './services/patientService';
 const app = express();
 import cors from 'cors';
+import toNewPatientEntry from './utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 app.use(cors());
@@ -23,6 +24,29 @@ app.get('/api/patients', (_req, res) => {
 app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
+});
+
+app.get('/api/patients/:id', (req, res) => {
+  const patientResult = patientService.getPatientById(req.params.id);
+  if (patientResult) {
+    res.send(patientResult);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.post('/api/patients', (req, res) => {
+  try {
+    const newPatientEntry = toNewPatientEntry(req.body);
+    const newlyAddedPatient = patientService.addNewPatient(newPatientEntry);
+    res.send(newlyAddedPatient);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += 'Error:' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 });
 
 app.listen(PORT, () => {
