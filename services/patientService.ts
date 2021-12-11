@@ -8,13 +8,16 @@ function getPatients(): Patient[] {
 }
 
 function getPatientsWithoutSsn(): PatientWithoutSsn[] {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation,
-  }));
+  return patients.map(
+    ({ id, name, dateOfBirth, gender, occupation, entries }) => ({
+      id,
+      name,
+      dateOfBirth,
+      gender,
+      occupation,
+      entries,
+    })
+  );
 }
 
 function getPatientById(id: string): Patient | undefined {

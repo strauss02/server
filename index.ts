@@ -4,6 +4,7 @@ import patientService from './services/patientService';
 const app = express();
 import cors from 'cors';
 import toNewPatientEntry from './utils';
+import { Fields } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 app.use(cors());
@@ -37,7 +38,7 @@ app.get('/api/patients/:id', (req, res) => {
 
 app.post('/api/patients', (req, res) => {
   try {
-    const newPatientEntry = toNewPatientEntry(req.body);
+    const newPatientEntry = toNewPatientEntry(req.body as Fields);
     const newlyAddedPatient = patientService.addNewPatient(newPatientEntry);
     res.send(newlyAddedPatient);
   } catch (error: unknown) {
